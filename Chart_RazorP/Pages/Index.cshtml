@@ -1,0 +1,199 @@
+﻿@page
+@using static Chart_RazorP.Models.Employee;
+
+@model Chart_RazorP.Pages.IndexModel;
+@{
+    ViewData["Title"] = "Home page";
+    var name = Model.employee[0].Name;
+}
+
+<div id="pdfContent">
+<div class="row">
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="card-header">
+                Bar Chart
+            </div>
+            @* //Adding Export to pdf button*@
+            <div class="row mt-3">
+                <div class="col">
+                    <button id="exportToPdfBtn" class="btn btn-primary">Export to PDF</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas class="" id="bar"></canvas>
+            </div>
+        </div>
+    </div>
+    <Grid>
+
+    </Grid>
+   @* <div class="col-sm-6">
+        <div class="row">
+            <div class="card-header">
+                Pie Chart
+            </div>
+            <div class="card-body">
+                <canvas class="" id="pie"></canvas>
+            </div>
+        </div>
+    </div>*@
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="card-header">
+                Line Chart
+            </div>
+            <div class="card-body">
+                <canvas class="" id="line"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+<!-- Add these scripts to your HTML -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<!-- Include jsPDF library -->
+
+
+<script type="text/javascript">
+
+    var empName = [];
+    var empSalary = [];
+
+    @foreach (var employee in Model.employee)
+    {
+        <text>
+        empName.push('@employee.Name');
+        empSalary.push('@employee.Salary');
+        </text>
+    }
+
+    var barchart = document.getElementById('bar');// document.getElementById('bar').getContext('2d');
+    debugger
+    console.log(barchart);
+    new Chart(barchart, {
+        type: 'bar',
+        data: {
+            labels: empName,
+            borderColor: "#fffff",
+            datasets: [{
+                label: 'Salary',
+                data: empSalary,
+                backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
+                ]
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    })
+
+    //var piechart = document.getElementById('pie');
+    //debugger
+    //console.log(piechart);
+    //var mypiechart = new Chart(piechart, {
+    //    type: 'pie',
+    //    data: {
+    //        labels: empName,
+    //        borderColor: "#fffff",
+    //        datasets: [{
+    //            label: 'Salary',
+    //            data: empSalary,
+    //            backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
+    //            ]
+    //        }]
+    //    },
+    //    options: {
+    //        scales: {
+    //            yAxes: [{
+    //                ticks: {
+    //                    beginAtZero: true
+    //                }
+    //            }]
+    //        }
+    //    }
+    //})
+
+    var linechart = document.getElementById('line');
+    var mybarchart = new Chart(linechart, {
+        type: 'line',
+        data: {
+            labels: empName,
+            borderColor: "#fffff",
+            lineTension: 0,
+            datasets: [{
+                fill: false,
+                label: 'Salary',
+                data: empSalary,
+                backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
+                ]
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    }
+                }]
+            }
+        }
+    })
+    // var exportToPdfBtn = document.getElementById('exportToPdfBtn');
+    //exportToPdfBtn.addEventListener('click', function () {
+    //    // Redirect the user to the next page when the button is clicked
+    //    window.location.href = '/NextPage'; // Replace with the actual URL of the next page
+    //});
+
+
+    document.getElementById("exportToPdfBtn").addEventListener("click", async function () {
+        // Capture the bar chart canvas as an image
+        const barCanvas = document.getElementById('bar');
+        const barCanvasImage = await html2canvas(barCanvas);
+
+        // Capture the line chart canvas as an image
+        const lineCanvas = document.getElementById('line');
+        const lineCanvasImage = await html2canvas(lineCanvas);
+
+        // Create a new jsPDF instance
+        const pdf = new jsPDF();
+
+        // Calculate the width and height of the images to fit in the PDF
+        const imgWidth = 170; // A4 page width in 
+        const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
+
+        // Add text label on top of the bar chart
+        pdf.setFontSize(12);
+        pdf.text("Bar Chart", imgWidth / 2, 10, { align: 'center' });
+
+        // Add the bar chart image to the PDF
+        pdf.addImage(barCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+
+        // Add a page to the PDF
+        pdf.addPage();
+
+        // Add text label on top of the line chart
+        pdf.setFontSize(12);
+        pdf.text("Line Chart", imgWidth / 2, 10, { align: 'center' });
+
+        // Add the line chart image to the PDF on the new page
+        pdf.addImage(lineCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+
+        // Download the PDF
+        pdf.save("exported-charts.pdf");
+    });
+
+</script>
+
