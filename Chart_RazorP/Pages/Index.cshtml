@@ -7,29 +7,60 @@
 	var name = Model.employee[0].Name;
 }
 
-<!-- HTML structure -->
 <div id="pdfContent">
+
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="row">
 				<div class="card-header">
 					Table Data
 				</div>
-				<!-- Table Data content -->
+				<div class="card-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Phone</th>
+								<th>Email</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>sidhu</td>
+								<td>123-456-7890</td>
+								<td>blablagmail.com</td>
+								<td>Moosa</td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td>mooseala</td>
+								<td>987-654-3210</td>
+								<td>blablagmail.com</td>
+								<td>pind</td>
+							</tr>
+							<!-- Add more rows as needed -->
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
+
 		<div class="col-sm-6">
 			<div class="row">
 				<div class="card-header">
 					Bar Chart
 				</div>
+
 				<div class="card-body">
-					<!-- Bar Chart Canvas -->
-					<canvas id="barChartCanvas"></canvas>
+					<canvas class="" id="bar"></canvas>
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- Adding Export to pdf button -->
 	<div class="row mt-3">
 		<div class="col">
 			<button id="exportToPdfBtn" class="btn btn-primary">Export to PDF</button>
@@ -42,20 +73,12 @@
 					Line Chart
 				</div>
 				<div class="card-body">
-					<!-- Line Chart Canvas -->
-					<canvas id="lineChartCanvas" style="display: none;"></canvas>
+					<canvas class="" id="line"></canvas>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-<!-- Include the necessary libraries (as shown in previous messages) -->
-
-<script>
-	// JavaScript code as shown in your previous message
-</script>
-
+	</div>
 
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
