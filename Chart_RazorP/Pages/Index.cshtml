@@ -8,6 +8,7 @@
 }
 
 <div id="pdfContent">
+  
 <div class="row">
     <div class="col-sm-6">
         <div class="row">
@@ -25,9 +26,7 @@
             </div>
         </div>
     </div>
-    <Grid>
-
-    </Grid>
+    
    @* <div class="col-sm-6">
         <div class="row">
             <div class="card-header">
@@ -52,12 +51,55 @@
     </div>
 </div>
 </div>
+<div class="col-sm-6">
+    <div class="row">
+        <div class="card-header">
+            Table Data
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>sidhu</td>
+                        <td>123-456-7890</td>
+                        <td>blablagmail.com</td>
+                        <td>Moosa</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>mooseala</td>
+                        <td>987-654-3210</td>
+                        <td>blablagmail.com</td>
+                        <td>pind</td>
+                    </tr>
 
+                    
+                    <!-- Add more rows as needed -->
+                </tbody>    
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"> </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
 <!-- Add these scripts to your HTML -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
 <!-- Include jsPDF library -->
 
 
@@ -158,42 +200,123 @@
     //});
 
 
+    //document.getElementById("exportToPdfBtn").addEventListener("click", async function () {
+    //    // Capture the bar chart canvas as an image
+    //    const barCanvas = document.getElementById('bar');
+    //    const barCanvasImage = await html2canvas(barCanvas);
+
+    //    // Capture the line chart canvas as an image
+    //    const lineCanvas = document.getElementById('line');
+    //    const lineCanvasImage = await html2canvas(lineCanvas);
+
+    //    // Create a new jsPDF instance
+    //    const pdf = new jsPDF();
+
+    //    // Calculate the width and height of the images to fit in the PDF
+    //    const imgWidth = 170; // A4 page width in 
+    //    const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
+
+    //    // Add text label on top of the bar chart
+    //    pdf.setFontSize(12);
+    //    pdf.text("Bar Chart", imgWidth / 2, 10, { align: 'center' });
+
+    //    // Add the bar chart image to the PDF
+    //    pdf.addImage(barCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+
+    //    // Add a page to the PDF
+    //    pdf.addPage();
+
+    //    // Add text label on top of the line chart
+    //    pdf.setFontSize(12);
+    //    pdf.text("Line Chart", imgWidth / 2, 10, { align: 'center' });
+
+    //    // Add the line chart image to the PDF on the new page                   
+    //    pdf.addImage(lineCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+
+    //    // Download the PDF
+    //    pdf.save("exported-charts.pdf");
+    //});
+
     document.getElementById("exportToPdfBtn").addEventListener("click", async function () {
-        // Capture the bar chart canvas as an image
         const barCanvas = document.getElementById('bar');
         const barCanvasImage = await html2canvas(barCanvas);
 
-        // Capture the line chart canvas as an image
         const lineCanvas = document.getElementById('line');
         const lineCanvasImage = await html2canvas(lineCanvas);
 
-        // Create a new jsPDF instance
         const pdf = new jsPDF();
-
-        // Calculate the width and height of the images to fit in the PDF
-        const imgWidth = 170; // A4 page width in 
+        const imgWidth = 170; // A4 page width in mm
         const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
 
-        // Add text label on top of the bar chart
-        pdf.setFontSize(12);
-        pdf.text("Bar Chart", imgWidth / 2, 10, { align: 'center' });
+        // Add title to the first page
+        pdf.setFontSize(18);
+        pdf.setTextColor(6, 120, 220); // Same blue as in the HTML chart
+        pdf.text("Bar Chart", imgWidth / 2, 20, { align: 'center' });
 
-        // Add the bar chart image to the PDF
-        pdf.addImage(barCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+        // Add bar chart image to the first page
+        pdf.addImage(barCanvasImage, 'PNG', 10, 30, imgWidth - 20, imgHeight - 10);
 
-        // Add a page to the PDF
+        // Add line chart image to the second page
         pdf.addPage();
+        pdf.setFontSize(18);
+        pdf.setTextColor(6, 120, 80); // Same green as in the HTML chart
+        pdf.text("Line Chart", imgWidth / 2, 20, { align: 'center' });
 
-        // Add text label on top of the line chart
-        pdf.setFontSize(12);
-        pdf.text("Line Chart", imgWidth / 2, 10, { align: 'center' });
+        // Increase the line chart line width for better visibility
+        const lineChartOptions = {
+            type: 'line',
+            data: {
+                labels: empName,
+                datasets: [{
+                    fill: false,
+                    label: 'Salary',
+                    data: empSalary,
+                    borderWidth: 2 // Increase the line width
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }]
+                }
+            }
+        };
 
-        // Add the line chart image to the PDF on the new page
-        pdf.addImage(lineCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+        const lineChartImage = await html2canvas(lineCanvas, {
+            backgroundColor: '#ffffff' // Set the background to white
+        });
+        const lineChartImageBase64 = lineChartImage.toDataURL('image/png', 1.0);
+        pdf.addImage(lineChartImageBase64, 'PNG', 10, 30, imgWidth - 20, imgHeight - 10);
+
+        // Add table data to the third page
+        pdf.addPage();
+        pdf.setFontSize(18);
+        pdf.setTextColor(6, 120, 220); // Same blue as in the HTML chart
+        pdf.text("Table Data", imgWidth / 2, 20, { align: 'center' });
+
+        const tableData = [
+            [1, 'sidhu', '123-456-7890', 'sidhu@example.com'],
+            [2, 'mooseala', '987-654-3210', 'mooseala@example.com']
+            // Add more rows as needed
+        ];
+
+        pdf.autoTable({
+            startY: 30,
+            head: [['ID', 'Name', 'Phone', 'Email']],
+            body: tableData,
+            theme: 'grid',
+            headStyles: { fillColor: [6, 120, 220], textColor: 255 },
+            styles: { textColor: [44, 62, 80] }
+        });
 
         // Download the PDF
         pdf.save("exported-charts.pdf");
     });
+
+
 
 </script>
 
