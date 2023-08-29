@@ -9,13 +9,18 @@
 
 <div id="pdfContent">
 
+
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="row">
-				<div class="card-header">
+				<div class="row mt-3">
+					<div class="col">
+						<button id="exportToPdfBtn" class="btn btn-primary">EXPORT TO PDF</button>
+					</div>
+				@*<div class="card-header">
 					Table Data
-				</div>
-				<div class="card-body">
+				</div>*@
+				@*<div class="card-body">
 					<table class="table">
 						<thead>
 							<tr>
@@ -31,243 +36,242 @@
 								<td>1</td>
 								<td>sidhu</td>
 								<td>123-456-7890</td>
-								<td>blablagmail.com</td>
+								<td>sidhu@example.com</td>
 								<td>Moosa</td>
 							</tr>
 							<tr>
 								<td>2</td>
 								<td>mooseala</td>
 								<td>987-654-3210</td>
-								<td>blablagmail.com</td>
+								<td>mooseala@example.com</td>
 								<td>pind</td>
 							</tr>
-							<!-- Add more rows as needed -->
+						
 						</tbody>
 					</table>
-				</div>
+				</div>*@
 			</div>
 		</div>
-
-		<div class="col-sm-6">
-			<div class="row">
-				<div class="card-header">
-					Bar Chart
-				</div>
-
-				<div class="card-body">
-					<canvas class="" id="bar"></canvas>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="card-header">
+						Bar Chart
+					</div>
+					<div class="card-body">
+						<canvas class="" id="bar" width="800" height="400"></canvas>
+					</div>
 				</div>
 			</div>
-		</div>
+
 	</div>
 	<!-- Adding Export to pdf button -->
-	<div class="row mt-3">
-		<div class="col">
-			<button id="exportToPdfBtn" class="btn btn-primary">Export to PDF</button>
-		</div>
+	
 	</div>
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="row">
-				<div class="card-header">
-					Line Chart
-				</div>
+				@*<div class="card-header">
+				line chart
+				</div>*@
 				<div class="card-body">
-					<canvas class="" id="line"></canvas>
+					<!--  Chart Canvas -->
+					<canvas class="" id="line" style="display:none"></canvas>
 				</div>
 			</div>
 		</div>
 	</div>
-	</div>
+</div>	
 
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
 
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"> </script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
-	<!-- Add these scripts to your HTML -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"> </script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+ <!-- Add these scripts to your HTML -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+ <!-- Include jsPDF library -->
 
-	<!-- Include jsPDF library -->
 
+<script type="text/javascript">
 
-	<script type="text/javascript">
+	var empName = [];
+	var empSalary = [];
 
-		var empName = [];
-		var empSalary = [];
+	@foreach (var employee in Model.employee)
+	{
+		<text>
+			empName.push('@employee.Name');
+		empSalary.push('@employee.Salary');
+		</text>
+	}
 
-		@foreach (var employee in Model.employee)
-		{
-			<text>
-				empName.push('@employee.Name');
-			empSalary.push('@employee.Salary');
-			</text>
+				var barchart = document.getElementById('bar');// document.getElementById('bar').getContext('2d');
+	debugger
+	console.log(barchart);
+	new Chart(barchart, {
+		type: 'bar',
+		data: {
+			labels: empName,
+			borderColor: "#fffff",
+			datasets: [{
+				label: 'Salary',
+				data: empSalary,
+				backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
+				]
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}]
+			}
 		}
+	})
 
-			var barchart = document.getElementById('bar');// document.getElementById('bar').getContext('2d');
-		debugger
-		console.log(barchart);
-		new Chart(barchart, {
-			type: 'bar',
-			data: {
-				labels: empName,
-				borderColor: "#fffff",
-				datasets: [{
-					label: 'Salary',
-					data: empSalary,
-					backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
-					]
+	//var piechart = document.getElementById('pie');
+	//debugger
+	//console.log(piechart);
+	//var mypiechart = new Chart(piechart, {
+	//    type: 'pie',
+	//    data: {
+	//        labels: empName,
+	//        borderColor: "#fffff",
+	//        datasets: [{
+	//            label: 'Salary',
+	//            data: empSalary,
+	//            backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
+	//            ]
+	//        }]
+	//    },
+	//    options: {
+	//        scales: {
+	//            yAxes: [{
+	//                ticks: {
+	//                    beginAtZero: true
+	//                }
+	//            }]
+	//        }
+	//    }
+	//})
+
+	var linechart = document.getElementById('line');
+	var mybarchart = new Chart(linechart, {
+		type: 'line',
+		data: {
+			labels: empName,
+			borderColor: "#fffff",
+			lineTension: 0,
+			datasets: [{
+				fill: false,
+				label: 'Salary',
+				data: empSalary,
+				backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
+				]
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true,
+					}
 				}]
-			},
-			options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true
-						}
-					}]
-				}
 			}
-		})
-
-		//var piechart = document.getElementById('pie');
-		//debugger
-		//console.log(piechart);
-		//var mypiechart = new Chart(piechart, {
-		//    type: 'pie',
-		//    data: {
-		//        labels: empName,
-		//        borderColor: "#fffff",
-		//        datasets: [{
-		//            label: 'Salary',
-		//            data: empSalary,
-		//            backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
-		//            ]
-		//        }]
-		//    },
-		//    options: {
-		//        scales: {
-		//            yAxes: [{
-		//                ticks: {
-		//                    beginAtZero: true
-		//                }
-		//            }]
-		//        }
-		//    }
-		//})
-
-		var linechart = document.getElementById('line');
-		var mybarchart = new Chart(linechart, {
-			type: 'line',
-			data: {
-				labels: empName,
-				borderColor: "#fffff",
-				lineTension: 0,
-				datasets: [{
-					fill: false,
-					label: 'Salary',
-					data: empSalary,
-					backgroundColor: ['rgba(6,120,220)', 'rgba(6,120,150)', 'rgba(6,120,80)', 'rgba(6,50,80)'
-					]
-				}]
-			},
-			options: {
-				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero: true,
-						}
-					}]
-				}
-			}
-		})
-		// var exportToPdfBtn = document.getElementById('exportToPdfBtn');
-		//exportToPdfBtn.addEventListener('click', function () {
-		//    // Redirect the user to the next page when the button is clicked
-		//    window.location.href = '/NextPage'; // Replace with the actual URL of the next page
-		//});
+		}
+	})
+	// var exportToPdfBtn = document.getElementById('exportToPdfBtn');
+	//exportToPdfBtn.addEventListener('click', function () {
+	//    // Redirect the user to the next page when the button is clicked
+	//    window.location.href = '/NextPage'; // Replace with the actual URL of the next page
+	//});
 
 
-		//document.getElementById("exportToPdfBtn").addEventListener("click", async function () {
-		//    // Capture the bar chart canvas as an image
-		//    const barCanvas = document.getElementById('bar');
-		//    const barCanvasImage = await html2canvas(barCanvas);
+	//document.getElementById("exportToPdfBtn").addEventListener("click", async function () {
+	//    // Capture the bar chart canvas as an image
+	//    const barCanvas = document.getElementById('bar');
+	//    const barCanvasImage = await html2canvas(barCanvas);
 
-		//    // Capture the line chart canvas as an image
-		//    const lineCanvas = document.getElementById('line');
-		//    const lineCanvasImage = await html2canvas(lineCanvas);
+	//    // Capture the line chart canvas as an image
+	//    const lineCanvas = document.getElementById('line');
+	//    const lineCanvasImage = await html2canvas(lineCanvas);
 
-		//    // Create a new jsPDF instance
-		//    const pdf = new jsPDF();
+	//    // Create a new jsPDF instance
+	//    const pdf = new jsPDF();
 
-		//    // Calculate the width and height of the images to fit in the PDF
-		//    const imgWidth = 170; // A4 page width in
-		//    const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
+	//    // Calculate the width and height of the images to fit in the PDF
+	//    const imgWidth = 170; // A4 page width in
+	//    const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
 
-		//    // Add text label on top of the bar chart
-		//    pdf.setFontSize(12);
-		//    pdf.text("Bar Chart", imgWidth / 2, 10, { align: 'center' });
+	//    // Add text label on top of the bar chart
+	//    pdf.setFontSize(12);
+	//    pdf.text("Bar Chart", imgWidth / 2, 10, { align: 'center' });
 
-		//    // Add the bar chart image to the PDF
-		//    pdf.addImage(barCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+	//    // Add the bar chart image to the PDF
+	//    pdf.addImage(barCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
 
-		//    // Add a page to the PDF
-		//    pdf.addPage();
+	//    // Add a page to the PDF
+	//    pdf.addPage();
 
-		//    // Add text label on top of the line chart
-		//    pdf.setFontSize(12);
-		//    pdf.text("Line Chart", imgWidth / 2, 10, { align: 'center' });
+	//    // Add text label on top of the line chart
+	//    pdf.setFontSize(12);
+	//    pdf.text("Line Chart", imgWidth / 2, 10, { align: 'center' });
 
-		//    // Add the line chart image to the PDF on the new page
-		//    pdf.addImage(lineCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
+	//    // Add the line chart image to the PDF on the new page
+	//    pdf.addImage(lineCanvasImage, 'JPEG', 0, 15, imgWidth, imgHeight); // Adjust vertical position
 
-		//    // Download the PDF
-		//    pdf.save("exported-charts.pdf");
-		//});
+	//    // Download the PDF
+	//    pdf.save("exported-charts.pdf");
+	//});
 
 	document.getElementById("exportToPdfBtn").addEventListener("click", async function () {
-    const barCanvas = document.getElementById('bar');
-    const barCanvasImage = await html2canvas(barCanvas);
+		const barCanvas = document.getElementById('bar');
+		const barCanvasImage = await html2canvas(barCanvas);
 
-    const lineCanvas = document.getElementById('line');
-    const lineCanvasImage = await html2canvas(lineCanvas);
+		const lineCanvas = document.getElementById('line'); //lines to capture the data from the hidden line chart canvas
 
-    const pdf = new jsPDF();
-    const imgWidth = 170; // A4 page width in mm
-    const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
+		// Capture only the data from the hidden line chart canvas
+		const lineChartImageData = lineCanvas.toDataURL("image/png");
 
-    // Add title to the first page
-    pdf.setFontSize(18);
-    pdf.setTextColor(6, 120, 220); // Same blue as in the HTML chart
-    pdf.text("Charts and Table Data", imgWidth / 2, 20, { align: 'center' });
+		const pdf = new jsPDF();
+		const imgWidth = 170; // A4 page width in mm
+		const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
 
-    // Add bar chart image to the first page
-    pdf.addImage(barCanvasImage, 'PNG', 10, 30, imgWidth -20, imgHeight - 10);
+		// Add title to the first page
+		pdf.setFontSize(18);
+		pdf.setTextColor(6, 120, 220); // Same blue as in the HTML chart
+		pdf.text("Charts and Table Data", imgWidth / 2, 20, { align: 'center' });
 
-    // Add line chart image to the first page, below the bar chart
-    pdf.addImage(lineCanvasImage, 'PNG', 10, imgHeight + 40, imgWidth - 20, imgHeight - 10);
+		// Add bar chart image to the first page
+		pdf.addImage(barCanvasImage, 'PNG', 10, 30, imgWidth - 20, imgHeight - 10);
 
-    // Add table data to the first page, below the line chart
-    const tableData = [
-        [1, 'sidhu', '123-456-7890', 'sidhu@example.com'],
-        [2, 'mooseala', '987-654-3210', 'mooseala@example.com']
-        // Add More Rows If You Need
-    ];
+		// Add line chart data to the PDF
+		pdf.addImage(lineChartImageData, 'PNG', 10, imgHeight + 50, imgWidth - 20, imgHeight - 10);  //capture the content of the hidden line chart
 
-    const tableOptions = {
-        startY: imgHeight * 2 + 80,
-        head: [['ID', 'Name', 'Phone', 'Email']],
-        body: tableData,
-        theme: 'grid',
-        headStyles: { fillColor: [6, 120, 220], textColor: 255 },
-        styles: { textColor: [44, 62, 80] }
-    };
-    pdf.autoTable(tableOptions);
+		// Add table data to the first page, below the line chart
+		const tableData = [
+			[1, 'sidhu', '123-456-7890', 'sidhu@example.com'],
+			[2, 'mooseala', '987-654-3210', 'mooseala@example.com']
+			// Add More Rows If You Need
+		];
+		pdf.fromHTML(tableData, 10, imgHeight + 150);
 
-    // DOWNLOAD PDF
-    pdf.save("exported-charts.pdf");
-});
+		const tableOptions = {
+			startY: imgHeight * 2 + 80,
+			head: [['ID', 'Name', 'Phone', 'Email']],
+			body: tableData,
+			theme: 'grid',
+			headStyles: { fillColor: [6, 120, 220], textColor: 255 },
+			styles: { textColor: [44, 62, 80] }
+		};
+		pdf.autoTable(tableOptions);
+
+		// DOWNLOAD PDF
+		pdf.save("exported-charts.pdf");
+	});
 
 
-	</script>
+</script>
 

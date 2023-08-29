@@ -20,3 +20,6 @@ html {
 body {
   margin-bottom: 60px;
 }
+.hide-in-html {
+    display: none;
+}
