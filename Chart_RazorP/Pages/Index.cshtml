@@ -20,44 +20,44 @@
 </style>
 
 <div id="pdfContent">
+	<div class="col-sm-6">
+		<div class="row">
+			<div class="card-header">
+				Bar Chart
+			</div>
 
-
-
-		<div class="col-sm-6">
-			<div class="row">
-				<div class="card-header">
-					Bar Chart
-				</div>
-
-				<div class="row mt-3">
-					<div class="col">
-						<button id="exportToPdfBtn" class="btn btn-primary">EXPORT TO PDF</button>
-					</div>
-				</div>
-
-				<div class="card-body">
-					<canvas class="" id="bar"> </canvas>
+			<div class="row mt-3">
+				<div class="col">
+					<button id="exportToPdfBtn" class="btn btn-primary">EXPORT TO PDF</button>
 				</div>
 			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="row">
-				<div class="card-header">
-					Line Chart
-				</div>
-				<div class="card-body">
-					<canvas class="mt-5" id="line"></canvas>
-				</div>
-				<div class="card-body">
-					<svg id="lineChart" ></svg>
-				</div>
 
+			<div class="card-body">
+				<canvas class="" id="bar"> </canvas>
 			</div>
 		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="row">
+			<div class="card-header">
+				Line Chart
+			</div>
+			<div class="card-body">
+				<canvas class="mt-5" id="line"></canvas>
+			</div>
+			<div class="card-body">
+				<svg id="lineChart"></svg>
+			</div>
+
+		</div>
+	</div>
+	<div class="col-sm-6 mt-4">
+		<img id="pieChartImage" src="/images/piechart.png" alt="Your Image Description" width="350" height="300"/>
+	</div>
 </div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"> </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
@@ -83,7 +83,7 @@
 		</text>
 	}
 
-	barchart = document.getElementById('bar');// document.getElementById('bar').getContext('2d');
+		barchart = document.getElementById('bar'); // document.getElementById('bar').getContext('2d');
 	debugger
 	console.log(barchart);
 	new Chart(barchart, {
@@ -237,31 +237,18 @@
 		// Bar Chart Canvas
 		debugger;
 		const barCanvas = document.getElementById('bar');
-		const barCanvasImage = await html2canvas(barCanvas);
-		const barCanvasImageData = barCanvas.toDataURL('image/png');
+		const barCanvasImage = await html2canvas(barCanvas, { scale: 2 });
+		const barCanvasImageData = barCanvasImage.toDataURL('image/png');
 
-		//const barCanvas = document.getElementById('bar');
-		//const barCanvasImage = await html2canvas(barCanvas);
-		//const canvas1 = document.createElement('canvas');
-		//const context1 = canvas1.getContext('2d');
-		//const scaleFactor1 = 2;
-		//const width1 = barCanvasImage.height * scaleFactor1;
-		//const height1 = barCanvasImage.width * scaleFactor1;
-		//canvas1.width = width1;
-		//canvas1.height = height1;
-
-		//const svgString1 = new XMLSerializer().serializeToString(barCanvas);
-		//const DOMURL1 = self.URL || self.webkitURL || self;
-		//const img1 = new Image();
-		//const svgBlob1 = new Blob([svgString1], { type: 'image/svg+xml;charset=utf-8' });
-		//const url1 = DOMURL1.createObjectURL(svgBlob1);
-
+		const pieCanvas = document.getElementById('pieChartImage');
+		const pieCanvassImage = await html2canvas(pieCanvas, { scale: 2 });
+		const pieCanvasImageData = pieCanvassImage.toDataURL('image/png');
 
 		// Line Chart Canvas
 		const lineChart = document.getElementById('lineChart');
 		const canvas = document.createElement('canvas');
 		const context = canvas.getContext('2d');
-		const scaleFactor = 4;
+		const scaleFactor = 1.5;
 		const width = 600 * scaleFactor;
 		const height = 400 * scaleFactor;
 		canvas.width = width;
@@ -275,51 +262,48 @@
 
 		img.onload = function () {
 			context.drawImage(img, 0, 0, width, height);
-			//context.drawImage(img1, 0, 0, width1, height1);
 			// Get the data URL of the canvas
 
-			const barChartImageData = canvas1.toDataURL('image/png');
+			
 			const lineChartImageData = canvas.toDataURL('image/png');
 
 			// Create PDF
 			const pdf = new jsPDF();
-			const imgWidth = 170; // A4 page width in mm
+			const imgWidth = 170;
 			const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
 
 			// Add title to the first page
 			pdf.setFontSize(18);
 			pdf.setTextColor(6, 120, 220); // Same blue as in the HTML chart
-			pdf.text("Charts and Table Data", imgWidth / 2, 20, { align: 'center' });
+			pdf.text("CHARTS AND TABLE DATA", imgWidth - 100 , 20, { align: 'center' });
 
-			pdf.addImage(barCanvasImageData, 'PNG', 10, 30, imgWidth - 20, imgHeight - 10);
-			pdf.addImage(lineChartImageData, 'PNG', 10, imgHeight + 35, imgWidth - 20, imgHeight + 10);
+			pdf.addImage(barCanvasImageData, 'PNG', 15, 30, imgWidth - 30, imgHeight - 20);
+			pdf.addImage(lineChartImageData, 'PNG', 15, imgHeight + 20, imgWidth - 10, imgHeight + 10 );
+			pdf.addImage(pieCanvasImageData, 'PNG', 30, imgHeight + 125, imgWidth - 80, imgHeight - 10 );
+
+			pdf.addPage();
 
 			// Table Data
 			const tableData = [
 				[1, 'sidhu', '123-456-7890', 'sidhu@example.com', 'test'],
 				[2, 'mooseala', '987-654-3210', 'mooseala@example.com', 'test'],
 				[3, 'mooseala', '987-654-3210', 'mooseala@example.com', 'test'],
+				[4, 'mooseala', '987-654-3210', 'mooseala@example.com', 'test'],
 			];
-
-			pdf.text("table 1", imgWidth / 2, 230, { align: 'center' });
 			const head = [['ID', 'Name', 'Phone', 'Email', 'Test']];
 			const body = tableData;
-			const startY = 240;
 			pdf.autoTable({
 				head: head,
 				body: body,
-				startY: startY,
 				theme: 'grid',
 				headStyles: { fillColor: [6, 120, 220], textColor: 255 },
 				styles: { textColor: [44, 62, 80] },
 			});
-
+		
 			pdf.save("exported-charts.pdf");
 		};
-
 		img.src = url;
 	});
-
 
 </script>
 
