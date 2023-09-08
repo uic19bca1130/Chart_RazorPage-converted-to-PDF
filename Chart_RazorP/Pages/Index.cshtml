@@ -52,7 +52,7 @@
 		</div>
 	</div>
 	<div class="col-sm-6 mt-4">
-		<img id="pieChartImage" src="/images/piechart.png" alt="Your Image Description" width="350" height="300"/>
+		<img id="pieChartImage" src="/images/piechart.png" alt="Your Image Description" height="320" width="350" style="display:none;"/>
 	</div>
 </div>
 
@@ -109,7 +109,7 @@
 		}
 	})
 
-	//code for creating line chart using chart
+	 //code for creating line chart using chart
 
 	var linechart = document.getElementById('line');
 	debugger;
@@ -241,16 +241,18 @@
 		const barCanvasImageData = barCanvasImage.toDataURL('image/png');
 
 		const pieCanvas = document.getElementById('pieChartImage');
-		const pieCanvassImage = await html2canvas(pieCanvas, { scale: 2 });
+		pieCanvas.style.display = 'block';
+		const pieCanvassImage = await html2canvas(pieCanvas, { scale: 2});
 		const pieCanvasImageData = pieCanvassImage.toDataURL('image/png');
+		pieCanvas.style.display = 'none';
 
 		// Line Chart Canvas
 		const lineChart = document.getElementById('lineChart');
 		const canvas = document.createElement('canvas');
 		const context = canvas.getContext('2d');
-		const scaleFactor = 1.5;
-		const width = 600 * scaleFactor;
-		const height = 400 * scaleFactor;
+		const scaleFactor = 4;
+		const width = 400 * scaleFactor;
+		const height = 150 * scaleFactor;
 		canvas.width = width;
 		canvas.height = height;
 
@@ -264,22 +266,49 @@
 			context.drawImage(img, 0, 0, width, height);
 			// Get the data URL of the canvas
 
-			
 			const lineChartImageData = canvas.toDataURL('image/png');
 
 			// Create PDF
 			const pdf = new jsPDF();
 			const imgWidth = 170;
 			const imgHeight = barCanvasImage.height * imgWidth / barCanvasImage.width;
+			const headingCenter = (210 / 2) - 5
 
-			// Add title to the first page
-			pdf.setFontSize(18);
-			pdf.setTextColor(6, 120, 220); // Same blue as in the HTML chart
-			pdf.text("CHARTS AND TABLE DATA", imgWidth - 100 , 20, { align: 'center' });
+			pdf.setFillColor(6, 120, 220); // Blue color
+			pdf.rect(10, 14, 190, 7, 'F'); // Rectangle for the blue box
 
-			pdf.addImage(barCanvasImageData, 'PNG', 15, 30, imgWidth - 30, imgHeight - 20);
-			pdf.addImage(lineChartImageData, 'PNG', 15, imgHeight + 20, imgWidth - 10, imgHeight + 10 );
-			pdf.addImage(pieCanvasImageData, 'PNG', 30, imgHeight + 125, imgWidth - 80, imgHeight - 10 );
+			// Add text inside the blue box at the top of the page
+			pdf.setFontSize(12); // Adjust the font size
+			pdf.setTextColor(255); // White text color
+			pdf.text("Bar Chart", headingCenter, 19, { align: 'center' }); // Adjust the vertical position
+
+			// Add title to the first page	
+			//Line chart 
+			pdf.setFillColor(6, 120, 220); // Blue color
+			pdf.rect(10, imgHeight + 10, 190, 7, 'F');
+
+			// Add text inside the blue box for the line chart
+			pdf.setFontSize(12);
+			pdf.setTextColor(255); // White text color
+			pdf.text("Line Chart", headingCenter, imgHeight + 15, { align: 'center' });
+
+
+			// Rectangle for the blue box at the top of the page
+
+			
+
+			pdf.setFillColor(6, 120, 220); // Blue color
+			pdf.rect(10, imgHeight + 110, 190, 7, 'F'); // Rectangle for the blue box
+
+			// Add text inside the blue box
+			pdf.setFontSize(12);
+			pdf.setTextColor(255); // White text color
+		
+			pdf.text("Pie Chart", headingCenter, imgHeight + 115, { align: 'center' });
+
+			pdf.addImage(barCanvasImageData, 'PNG', 30, 25, imgWidth - 30, imgHeight - 20);
+			pdf.addImage(lineChartImageData, 'PNG', 30, imgHeight + 20, imgWidth - 15, imgHeight);
+			pdf.addImage(pieCanvasImageData, 'PNG', 50, imgHeight +120	, imgWidth - 75, imgHeight);
 
 			pdf.addPage();
 
@@ -299,11 +328,12 @@
 				headStyles: { fillColor: [6, 120, 220], textColor: 255 },
 				styles: { textColor: [44, 62, 80] },
 			});
-		
+
 			pdf.save("exported-charts.pdf");
 		};
 		img.src = url;
 	});
+
 
 </script>
 
