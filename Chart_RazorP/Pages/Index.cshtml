@@ -56,12 +56,12 @@
 	</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script> @*tool tip*@
-<script src="https://d3js.org/d3.v7.min.js"></script> @*SVG Line chart UI visibility*@
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+@* <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>*@
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script> @*tool tip*@
+ <script src="https://d3js.org/d3.v7.min.js"></script> @*SVG Line chart UI visibility*@
 
 <!-- Include jsPDF library -->
 
@@ -233,7 +233,7 @@
 		// Bar Chart Canvas
 		debugger;
 		const barCanvas = document.getElementById('bar');
-		//const barCanvasImage = await html2canvas(barCanvas);
+		//const barcanvasimage = await html2canvas(barcanvas);
 		const barCanvasImageData = barCanvas.toDataURL('image/png');
 
 		const pieCanvas = document.getElementById('pieChartImage');
