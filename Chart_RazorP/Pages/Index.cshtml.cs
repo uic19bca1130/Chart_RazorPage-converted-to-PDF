@@ -19,9 +19,9 @@ namespace Chart_RazorP.Pages
         [BindProperty]
         public List<Employee> employee { get; set; } = default!;
 
-        public async void OnGet()
-        {
-            employee =  _context.Employees.ToList();
-        }
-    }
+		public void OnGet()
+		{
+			employee = _context.Employees.ToList();
+		}
+	}
 }
