@@ -23,3 +23,33 @@ body {
 .hide-in-html {
     display: none;
 }
+<style >
+/* Define a custom font */
+@font-face {
+    font-family: 'CustomFont'; /* Provide a unique font name */
+    src: url('path-to-your-font.ttf') format('truetype'); /* Replace 'path-to-your-font.ttf' with the actual path to your font file */
+}
+
+/* Apply the custom font to the button text */
+#exportToPdfBtn {
+    font-family: 'CustomFont'; /* Use the font-family name defined earlier */
+}
+
+</style >
+<style >
+/* Define a custom font */
+@font-face {
+    font-family: 'CustomFont'; /* Provide a unique font name */
+    src: url('path-to-your-font.ttf') format('truetype'); /* Replace 'path-to-your-font.ttf' with the actual path to your font file */
+}
+
+/* Apply the custom font to the text inside the blue box */
+.blue-box {
+    font-family: 'CustomFont'; /* Use the font-family name defined earlier */
+    background-color: lightblue; /* Light blue background color */
+    color: white; /* White text color */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+</style >
